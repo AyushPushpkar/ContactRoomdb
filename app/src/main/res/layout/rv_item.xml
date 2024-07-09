@@ -41,7 +41,7 @@
             android:fontFamily="cursive"
             android:text="TextView"
             android:textColor="#EF6666"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="@+id/tvname"

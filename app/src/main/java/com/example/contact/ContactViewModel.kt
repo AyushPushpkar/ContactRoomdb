@@ -13,75 +13,83 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ContactViewModel(private val dao  : ContactDAO) : ViewModel() {
+class ContactViewModel(private val dao: ContactDAO) : ViewModel() {
 
     private val _state = MutableStateFlow(ContactState())
     private val _sortType = MutableStateFlow(sortType.NAME)
     private val _contacts = _sortType
         .flatMapLatest { sortType ->
-            when(sortType){
+            when (sortType) {
                 com.example.contact.sortType.NAME -> dao.getContactOrderedByFirstName()
                 com.example.contact.sortType.PHONE_NUMBER -> dao.getContactOrderedByPhoneNumber()
             }
         }
-        .stateIn(viewModelScope , SharingStarted.WhileSubscribed() , emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    val state = combine(_state ,_contacts ,_sortType){ state , contacts, sortType ->
+    val state = combine(_state, _contacts, _sortType) { state, contacts, sortType ->
         state.copy(
-            sortType = sortType ,
+            sortType = sortType,
             contacts = contacts
         )
-    }.stateIn(viewModelScope , SharingStarted.WhileSubscribed(5000) , ContactState())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ContactState())
 
-    fun onEvent(event: ContactEvent){
-        when(event){
+    fun onEvent(event: ContactEvent) {
+        when (event) {
             is ContactEvent.DeleteContact -> {
                 viewModelScope.launch {
                     dao.deleteContact(event.contact)
                 }
             }
+
             ContactEvent.HideDialog -> {
-                _state.update { it.copy(
-                    isAddingContact = false
-                ) }
+                _state.update {
+                    it.copy(
+                        isAddingContact = false
+                    )
+                }
             }
+
             is ContactEvent.SetName -> {
-                _state.update { it.copy(
-                    name = event.Name
-                ) }
+                _state.update {
+                    it.copy(
+                        name = event.Name
+                    )
+                }
             }
+
             is ContactEvent.SetNumber -> {
-                _state.update { it.copy(
-                    number = event.Number
-                ) }
+                _state.update {
+                    it.copy(
+                        number = event.Number
+                    )
+                }
             }
+
             is ContactEvent.ShowDialog -> {
-                _state.value = _state.value.copy(isAddingContact = true)
-                Log.d("ContactViewModel", "Show dialog event triggered")
+                _state.update {
+                    it.copy(
+                        isAddingContact = true
+                    )
+                }
             }
+
             is ContactEvent.SortContact -> {
                 _sortType.value = event.sortType
             }
-            ContactEvent.saveContact -> {
-                val firstName = state.value.name
-                val phoneNumber = state.value.number
 
-                if(firstName.isBlank() || phoneNumber.isBlank()){
+            ContactEvent.saveContact -> {
+                val firstName = _state.value.name
+                val phoneNumber = _state.value.number
+
+                if (firstName.isBlank() || phoneNumber.isBlank()) {
                     return
                 }
 
-                val contact =Contact(
-                    Name = firstName ,
-                    Number = phoneNumber
-                )
+                val contact = Contact(Name = firstName, Number = phoneNumber)
                 viewModelScope.launch {
                     dao.upsertContact(contact)
+                    _state.update { it.copy(isAddingContact = false, name = "", number = "") }
                 }
-                _state.update { it.copy(
-                    isAddingContact = false ,
-                    name = "" ,
-                    number = ""
-                ) }
             }
         }
     }
