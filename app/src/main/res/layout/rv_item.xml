@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
-    android:backgroundTint="#FAF1F1"
+    android:backgroundTint="#FFFFFF"
     android:outlineAmbientShadowColor="@color/white"
     app:cardElevation="20dp"
     app:cardCornerRadius="10dp">
@@ -25,11 +25,11 @@
             android:fontFamily="cursive"
             android:padding="5dp"
             android:text="TextView"
-            android:textColor="#ffa7a7"
+            android:textColor="#EF6666"
             android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/textView"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintEnd_toStartOf="@+id/deleteButton"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
@@ -40,7 +40,7 @@
             android:layout_margin="5dp"
             android:fontFamily="cursive"
             android:text="TextView"
-            android:textColor="#ffa7a7"
+            android:textColor="#EF6666"
             android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
@@ -65,7 +65,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -80,10 +80,10 @@
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/imageView"
+            app:layout_constraintTop_toBottomOf="@id/deleteButton"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/imageView"
-            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="@+id/deleteButton"
+            app:layout_constraintStart_toStartOf="@+id/deleteButton"
             app:srcCompat="@drawable/baseline_edit_square_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

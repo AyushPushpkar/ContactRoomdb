@@ -21,4 +21,6 @@ interface ContactDAO {
 
     @Query("SELECT * FROM contact ORDER BY PhoneNumber ASC")
     fun getContactOrderedByPhoneNumber() : Flow<List<Contact>>
+
+
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="18dp"
+    android:id="@+id/DialogUpdate"
+    >
+
+    <EditText
+        android:id="@+id/updatetitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/edit_backgnd"
+        android:ems="15"
+        android:hint="Name"
+        android:inputType="textMultiLine"
+        android:padding="15dp"
+        android:textColor="#E91E63"
+        android:textColorHint="#9AE91E63"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/updatedes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/edit_backgnd"
+        android:ems="15"
+        android:hint="Phone Number"
+        android:inputType="textMultiLine"
+        android:minLines="4"
+        android:scrollbars="vertical"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/updatetitle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/updatetitle"
+        app:layout_constraintTop_toBottomOf="@+id/updatetitle" />
+
+    <Button
+        android:id="@+id/cancelbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#F44336"
+        android:text="Cancel"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toStartOf="@+id/saveupbtn"
+        app:layout_constraintStart_toStartOf="@+id/updatedes"
+        app:layout_constraintTop_toBottomOf="@+id/updatedes" />
+
+    <Button
+        android:id="@+id/saveupbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#E91E63"
+        android:text="Save"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="@+id/updatedes"
+        app:layout_constraintStart_toEndOf="@id/cancelbtn"
+        app:layout_constraintTop_toBottomOf="@+id/updatedes" />
+</androidx.constraintlayout.widget.ConstraintLayout>

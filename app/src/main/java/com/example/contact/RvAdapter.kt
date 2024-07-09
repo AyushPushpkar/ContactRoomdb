@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.databinding.RvItemBinding
 
-class RvAdapter(var context: Context, var contactList: List<Contact>) :
+class RvAdapter(var context: Context, var contactList: List<Contact> ,private val onDeleteClick: (Contact) -> Unit) :
     RecyclerView.Adapter<RvAdapter.viewHolder>() {
 
     inner class viewHolder(var binding: RvItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -21,7 +21,18 @@ class RvAdapter(var context: Context, var contactList: List<Contact>) :
     }
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
-        holder.binding.tvname.text = contactList[position].Name
-        holder.binding.textView.text = contactList[position].Number
+
+        val contact = contactList[position]
+        holder.binding.tvname.text = contact.Name
+        holder.binding.textView.text = contact.Number
+
+        holder.binding.deleteButton.setOnClickListener {
+            onDeleteClick(contact)
+        }
+    }
+
+    fun updateContacts(newContacts: List<Contact>) {
+        contactList = newContacts
+        notifyDataSetChanged()
     }
 }

@@ -1,5 +1,6 @@
 package com.example.contact
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -7,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -55,15 +55,34 @@ class ContactViewModel(private val dao  : ContactDAO) : ViewModel() {
                     number = event.Number
                 ) }
             }
-            ContactEvent.ShowDialog -> {
-                _state.update { it.copy(
-                    isAddingContact = true
-                ) }
+            is ContactEvent.ShowDialog -> {
+                _state.value = _state.value.copy(isAddingContact = true)
+                Log.d("ContactViewModel", "Show dialog event triggered")
             }
             is ContactEvent.SortContact -> {
                 _sortType.value = event.sortType
             }
-            ContactEvent.saveContact -> TODO()
+            ContactEvent.saveContact -> {
+                val firstName = state.value.name
+                val phoneNumber = state.value.number
+
+                if(firstName.isBlank() || phoneNumber.isBlank()){
+                    return
+                }
+
+                val contact =Contact(
+                    Name = firstName ,
+                    Number = phoneNumber
+                )
+                viewModelScope.launch {
+                    dao.upsertContact(contact)
+                }
+                _state.update { it.copy(
+                    isAddingContact = false ,
+                    name = "" ,
+                    number = ""
+                ) }
+            }
         }
     }
 }
