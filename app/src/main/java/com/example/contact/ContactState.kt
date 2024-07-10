@@ -5,5 +5,5 @@ data class ContactState(
     val name : String ="" ,
     val number : String = "" ,
     val isAddingContact : Boolean =  false ,
-    val sortType: sortType = com.example.contact.sortType.NAME
+    val sortType: sortType = com.example.contact.sortType.NAME ,
 )

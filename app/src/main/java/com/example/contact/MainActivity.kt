@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     if (this@MainActivity::addContactDialog.isInitialized && addContactDialog.isShowing) {
                         addContactDialog.dismiss()
-
                     }
                 }
             }
@@ -99,9 +98,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         val recyclerView = binding.recview
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = RvAdapter(this, emptyList()) { contact ->
-            viewModel.onEvent(ContactEvent.DeleteContact(contact))
-        }
+        adapter = RvAdapter(this, emptyList()){ contact ->
+                viewModel.onEvent(ContactEvent.DeleteContact(contact))
+            }
         recyclerView.adapter = adapter
     }
 
@@ -185,4 +184,6 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
         return dialog
     }
+
+
 }

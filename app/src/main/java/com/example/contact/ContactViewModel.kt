@@ -1,7 +1,6 @@
 package com.example.contact
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,6 +41,7 @@ class ContactViewModel(private val dao: ContactDAO , private val context: Contex
                     dao.deleteContact(event.contact)
                 }
             }
+
 
             ContactEvent.HideDialog -> {
                 _state.update {
@@ -110,6 +110,8 @@ class ContactViewModel(private val dao: ContactDAO , private val context: Contex
                     }
                 }
             }
+
         }
     }
+
 }

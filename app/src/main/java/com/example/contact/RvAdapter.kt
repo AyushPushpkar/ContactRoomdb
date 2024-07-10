@@ -10,7 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.contact.databinding.RvItemBinding
 
-class RvAdapter(var context: Context, var contactList: List<Contact> ,private val onDeleteClick: (Contact) -> Unit) :
+class RvAdapter(var context: Context, var contactList: List<Contact> ,private val onDeleteClick: (Contact) -> Unit ) :
     RecyclerView.Adapter<RvAdapter.viewHolder>() {
 
     inner class viewHolder(var binding: RvItemBinding) : RecyclerView.ViewHolder(binding.root)
