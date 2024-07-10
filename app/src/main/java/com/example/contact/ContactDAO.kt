@@ -22,5 +22,10 @@ interface ContactDAO {
     @Query("SELECT * FROM contact ORDER BY PhoneNumber ASC")
     fun getContactOrderedByPhoneNumber() : Flow<List<Contact>>
 
+    @Query("SELECT * FROM contact WHERE Name = :name LIMIT 1")
+    suspend fun getContactByName(name: String): Contact?
+
+    @Query("SELECT * FROM contact WHERE PhoneNumber = :phoneNumber LIMIT 1")
+    suspend fun getContactByPhoneNumber(phoneNumber: String): Contact?
 
 }

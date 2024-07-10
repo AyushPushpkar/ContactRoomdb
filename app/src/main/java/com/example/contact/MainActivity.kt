@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ContactViewModel(db.dao) as T
+                    return ContactViewModel(db.dao , applicationContext) as T
                 }
             }
         }
@@ -85,14 +85,12 @@ class MainActivity : AppCompatActivity() {
                 if (state.isAddingContact) {
                     if (!this@MainActivity::addContactDialog.isInitialized || !addContactDialog.isShowing) {
                         addContactDialog = showAddContactDialog()
-                        Log.d("MainActivity", "Dialog shown")
                     }
                 } else {
                     if (this@MainActivity::addContactDialog.isInitialized && addContactDialog.isShowing) {
                         addContactDialog.dismiss()
-                        Log.d("MainActivity", "Dialog dismissed")
+
                     }
-                    Log.d("MainActivity", "Dialog not shown: isAddingContact = ${state.isAddingContact}")
                 }
             }
         }
@@ -159,6 +157,17 @@ class MainActivity : AppCompatActivity() {
 
             if (name.isEmpty() || phoneNumber.isEmpty()) {
                 Snackbar.make(binding.root, "Please enter both name and phone number", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validate phone number format
+            if (!phoneNumber.matches("^[1-9]\\d{9}\$".toRegex())) {
+                // Show an error message if the phone number format is invalid
+                Snackbar.make(
+                    binding.root,
+                    "Please enter a valid 10-digit phone number starting with a non-zero digit",
+                    Snackbar.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 

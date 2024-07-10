@@ -1,6 +1,8 @@
 package com.example.contact
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ContactViewModel(private val dao: ContactDAO) : ViewModel() {
+class ContactViewModel(private val dao: ContactDAO , private val context: Context) : ViewModel() {
 
     private val _state = MutableStateFlow(ContactState())
     private val _sortType = MutableStateFlow(sortType.NAME)
@@ -84,11 +86,28 @@ class ContactViewModel(private val dao: ContactDAO) : ViewModel() {
                 if (firstName.isBlank() || phoneNumber.isBlank()) {
                     return
                 }
-
-                val contact = Contact(Name = firstName, Number = phoneNumber)
+                // Check for duplicate name
                 viewModelScope.launch {
-                    dao.upsertContact(contact)
-                    _state.update { it.copy(isAddingContact = false, name = "", number = "") }
+                    val existingName = dao.getContactByName(firstName)
+                    if (existingName != null) {
+                        // Show toast for duplicate name
+                        Toast.makeText(context, "Contact already exists !", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
+                    // Check for duplicate phone number
+                    val existingNumber = dao.getContactByPhoneNumber(phoneNumber)
+                    if (existingNumber != null) {
+                        // Show toast for duplicate phone number
+                        Toast.makeText(context, "Phone number $phoneNumber already in use", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
+                    val contact = Contact(Name = firstName, Number = phoneNumber)
+                    viewModelScope.launch {
+                        dao.upsertContact(contact)
+                        _state.update { it.copy(isAddingContact = false, name = "", number = "") }
+                    }
                 }
             }
         }
