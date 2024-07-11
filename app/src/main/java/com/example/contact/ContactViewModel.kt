@@ -1,9 +1,12 @@
 package com.example.contact
 
+
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emreesen.sntoast.SnToast
+import com.emreesen.sntoast.Type
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -107,7 +110,9 @@ class ContactViewModel(private val dao: ContactDAO , private val context: Contex
                     viewModelScope.launch {
                         dao.upsertContact(contact)
                         _state.update { it.copy(isAddingContact = false, name = "", number = "") }
+
                     }
+
                 }
             }
 
@@ -158,6 +163,7 @@ class ContactViewModel(private val dao: ContactDAO , private val context: Contex
                         )
                     }
                 }
+
             }
             is ContactEvent.ShowUpdateDialog -> {
                 _state.update {

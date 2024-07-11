@@ -38,6 +38,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -83,6 +84,10 @@ dependencies {
 
     implementation ("com.airbnb.android:lottie:3.7.0")
 
+    //custom toast
+    implementation ("com.github.emreesen27:Android-Custom-Toast-Message:1.0.5")
 
+    //fancy toast
+    implementation ("io.github.shashank02051997:FancyToast:2.0.2")
 
 }

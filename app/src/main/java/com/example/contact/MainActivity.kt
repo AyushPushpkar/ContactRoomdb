@@ -19,8 +19,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
+import com.emreesen.sntoast.SnToast
+import com.emreesen.sntoast.Type
 import com.example.contact.databinding.ActivityMainBinding
 import com.example.contact.databinding.ContactupdateBinding
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -197,6 +200,8 @@ class MainActivity : AppCompatActivity() {
             viewModel.onEvent(ContactEvent.SetNumber(phoneNumber))
             viewModel.onEvent(ContactEvent.saveContact)
             dialog.dismiss()
+            // Show success toast
+            showAddToast("Contact added successfully")
         }
 
         dialogBinding.cancelbtn.setOnClickListener {
@@ -245,6 +250,8 @@ class MainActivity : AppCompatActivity() {
 
             viewModel.onEvent(ContactEvent.UpdateContact(contact.copy(Name = updatedName, Number = updatedNumber)))
             dialog.dismiss()
+            // Show success toast
+            showUpdateToast("Contact updated ")
         }
 
         dialogBinding.cancelbtn.setOnClickListener {
@@ -256,5 +263,25 @@ class MainActivity : AppCompatActivity() {
         return dialog
     }
 
+    private fun showUpdateToast(message: String) {
+        SnToast.Builder()
+            .context(this)
+            .type(Type.INFORMATION)
+            .message(message)
+            .animation(true)
+            .duration(3000)
+            .build()
+    }
+
+    private fun showAddToast(message: String) {
+        SnToast.Builder()
+            .context(this)
+            .type(Type.SUCCESS)
+            .message(message)
+            .animation(true)
+            .duration(3000)
+            .build()
+
+    }
 
 }

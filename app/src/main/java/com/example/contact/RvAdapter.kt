@@ -4,10 +4,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.emreesen.sntoast.SnToast
+import com.emreesen.sntoast.Type
+import com.example.contact.databinding.ContactupdateBinding
+import com.example.contact.databinding.DeletedialogBinding
 import com.example.contact.databinding.RvItemBinding
 
 class RvAdapter(var context: Context, var contactList: List<Contact> ,private val onDeleteClick: (Contact) -> Unit ,private val onUpdateClick: (Contact) -> Unit ) :
@@ -31,7 +36,7 @@ class RvAdapter(var context: Context, var contactList: List<Contact> ,private va
         holder.binding.textView.text = contact.Number
 
         holder.binding.deleteButton.setOnClickListener {
-            onDeleteClick(contact)
+            showDeleteConfirmationDialog(contact)
         }
 
         holder.binding.updatebtn.setOnClickListener {
@@ -57,8 +62,48 @@ class RvAdapter(var context: Context, var contactList: List<Contact> ,private va
 
     }
 
+    private fun showDeleteConfirmationDialog(contact: Contact) : AlertDialog {
+        val dialogBinding = DeletedialogBinding.inflate(LayoutInflater.from(context))
+
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogBinding.root)
+            .setTitle("Confirm Delete")
+            .setIcon(R.drawable.baseline_delete_24)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(R.drawable.dialogback)
+
+        dialogBinding.textView3.setText("Are you sure you want to delete ${contact.Name}?")
+
+        dialogBinding.dltbtn.setOnClickListener {
+            onDeleteClick(contact)
+            dialog.dismiss()
+
+            showDeleteToast("Contact deleted successfully")
+        }
+
+        dialogBinding.cancelbtnn.setOnClickListener {
+            dialog.dismiss() // Dismiss dialog on cancel
+        }
+
+        dialog.show()
+        return dialog
+
+    }
+
     fun updateContacts(newContacts: List<Contact>) {
         contactList = newContacts
         notifyDataSetChanged()
+    }
+
+    private fun showDeleteToast(message: String) {
+        SnToast.Builder()
+            .context(context)
+            .type(Type.ERROR)
+            .message(message)
+            .animation(true)
+            .duration(3000)
+            .build();
     }
 }
