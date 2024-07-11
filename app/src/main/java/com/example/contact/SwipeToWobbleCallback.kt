@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SimpleSwipeCallback(
     private val adapter: RvAdapter,
-    private val swipeLimit: Float = 0.2f // Adjust this value as needed (fraction of itemView width)
+    private val swipeLimit: Float = 0.15f // Adjust this value as needed (fraction of itemView width)
 ) : ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(

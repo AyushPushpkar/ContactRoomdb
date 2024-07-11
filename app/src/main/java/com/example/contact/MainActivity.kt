@@ -162,6 +162,7 @@ class MainActivity : AppCompatActivity() {
         binding.radioButton2.setOnClickListener {
             viewModel.onEvent(ContactEvent.SortContact(sortType.PHONE_NUMBER))
         }
+
     }
 
     private fun showAddContactDialog(): AlertDialog {
@@ -169,8 +170,8 @@ class MainActivity : AppCompatActivity() {
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogBinding.root)
-            .setTitle("Add contact")
-            .setIcon(R.drawable.baseline_edit_square_24)
+            .setTitle("  Add contact")
+            .setIcon(R.drawable.baseline_person_add_alt_1_24)
             .setCancelable(false) // Make the dialog non-cancellable
             .create()
 
@@ -268,6 +269,7 @@ class MainActivity : AppCompatActivity() {
             .context(this)
             .type(Type.INFORMATION)
             .message(message)
+            .cancelable(true)
             .animation(true)
             .duration(3000)
             .build()
@@ -278,6 +280,7 @@ class MainActivity : AppCompatActivity() {
             .context(this)
             .type(Type.SUCCESS)
             .message(message)
+            .cancelable(true)
             .animation(true)
             .duration(3000)
             .build()
