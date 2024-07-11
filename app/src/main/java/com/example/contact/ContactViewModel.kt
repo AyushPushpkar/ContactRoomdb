@@ -111,6 +111,64 @@ class ContactViewModel(private val dao: ContactDAO , private val context: Contex
                 }
             }
 
+            ContactEvent.HideUpdateDialog -> {
+                _state.update {
+                    it.copy(
+                        isUpdatingContact = false,
+                        contactToUpdate = null
+                    )
+                }
+            }
+
+            is ContactEvent.UpdateContact -> {
+                val updatedContact = event.updatedContact
+
+                if (updatedContact.Name.isBlank() || updatedContact.Number.isBlank()) {
+                    return
+                }
+
+                // Check for duplicate name (optional)
+                viewModelScope.launch {
+                    val existingName = dao.getContactByName(updatedContact.Name)
+                    if (existingName != null && existingName.Id != updatedContact.Id) {
+                        // Show toast for duplicate name
+                        Toast.makeText(context, "Contact with this name already exists!", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
+                    // Check for duplicate phone number (optional)
+                    val existingNumber = dao.getContactByPhoneNumber(updatedContact.Number)
+                    if (existingNumber != null && existingNumber.Id != updatedContact.Id) {
+                        // Show toast for duplicate phone number
+                        Toast.makeText(context, "Phone number ${updatedContact.Number} already in use", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
+                    // Update contact in database
+                    dao.upsertContact(updatedContact)
+
+                    // Update state to reflect changes
+                    _state.update { currentState ->
+                        val updatedContacts = currentState.contacts.map { contact ->
+                            if (contact.Id == updatedContact.Id) updatedContact else contact
+                        }
+                        currentState.copy(
+                            contacts = updatedContacts,
+                            isUpdatingContact = false
+                        )
+                    }
+                }
+            }
+            is ContactEvent.ShowUpdateDialog -> {
+                _state.update {
+                    it.copy(
+                        isUpdatingContact = true,
+                        contactToUpdate = event.contact ,
+                        name = event.contact.Name,
+                        number = event.contact.Number
+                    )
+                }
+            }
         }
     }
 

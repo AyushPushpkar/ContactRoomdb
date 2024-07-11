@@ -10,7 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.contact.databinding.RvItemBinding
 
-class RvAdapter(var context: Context, var contactList: List<Contact> ,private val onDeleteClick: (Contact) -> Unit ) :
+class RvAdapter(var context: Context, var contactList: List<Contact> ,private val onDeleteClick: (Contact) -> Unit ,private val onUpdateClick: (Contact) -> Unit ) :
     RecyclerView.Adapter<RvAdapter.viewHolder>() {
 
     inner class viewHolder(var binding: RvItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -34,6 +34,10 @@ class RvAdapter(var context: Context, var contactList: List<Contact> ,private va
             onDeleteClick(contact)
         }
 
+        holder.binding.updatebtn.setOnClickListener {
+            onUpdateClick(contact)
+        }
+
         // Configure Glide for instant loading
         val requestOptions = RequestOptions()
             .placeholder(R.drawable.spidey) // Placeholder image while loading
@@ -46,6 +50,9 @@ class RvAdapter(var context: Context, var contactList: List<Contact> ,private va
             .load("https://picsum.photos/id/${contact.Id}/500/500")
             .apply(requestOptions)
             .into(holder.binding.imageView2)
+
+          // Apply wobble animation to the root view of each item
+//        AnimationUtils.wobbleAnimation(holder.binding.root)
 
 
     }

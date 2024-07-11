@@ -1,5 +1,7 @@
 package com.example.contact
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.contact.databinding.ActivityMainBinding
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: RvAdapter
     private lateinit var addContactDialog: AlertDialog
+    private lateinit var updateContactDialog: AlertDialog
 
     private val db by lazy {
         Room.databaseBuilder(
@@ -91,6 +95,17 @@ class MainActivity : AppCompatActivity() {
                         addContactDialog.dismiss()
                     }
                 }
+
+                // Show update contact dialog based on ViewModel state
+                if (state.isUpdatingContact && state.contactToUpdate != null) {
+                    if (!this@MainActivity::updateContactDialog.isInitialized || !updateContactDialog.isShowing) {
+                        updateContactDialog = showUpdateContactDialog(state.contactToUpdate!!)
+                    }
+                } else {
+                    if (this@MainActivity::updateContactDialog.isInitialized && updateContactDialog.isShowing) {
+                        updateContactDialog.dismiss()
+                    }
+                }
             }
         }
     }
@@ -98,10 +113,18 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         val recyclerView = binding.recview
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = RvAdapter(this, emptyList()){ contact ->
+        adapter = RvAdapter(this, emptyList(),
+            onDeleteClick = { contact ->
                 viewModel.onEvent(ContactEvent.DeleteContact(contact))
+            },
+            onUpdateClick = { contact ->
+                viewModel.onEvent(ContactEvent.ShowUpdateDialog(contact))
             }
+        )
         recyclerView.adapter = adapter
+
+        val itemTouchHelper = ItemTouchHelper(SimpleSwipeCallback(adapter))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -179,6 +202,54 @@ class MainActivity : AppCompatActivity() {
         dialogBinding.cancelbtn.setOnClickListener {
             dialog.dismiss() // Dismiss dialog on cancel
             viewModel.onEvent(ContactEvent.HideDialog)
+        }
+
+        dialog.show()
+        return dialog
+    }
+
+    private fun showUpdateContactDialog(contact: Contact): AlertDialog {
+        val dialogBinding = ContactupdateBinding.inflate(LayoutInflater.from(this@MainActivity))
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogBinding.root)
+            .setTitle("Update Contact")
+            .setIcon(R.drawable.baseline_edit_square_24)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(R.drawable.dialogback)
+
+        // Pre-fill dialog fields with current contact details
+        dialogBinding.updatetitle.setText(contact.Name)
+        dialogBinding.updatedes.setText(contact.Number)
+
+        dialogBinding.saveupbtn.setOnClickListener {
+            val updatedName = dialogBinding.updatetitle.text.toString().trim()
+            val updatedNumber = dialogBinding.updatedes.text.toString().trim()
+
+            if (updatedName.isEmpty() || updatedNumber.isEmpty()) {
+                Snackbar.make(binding.root, "Please enter both name and phone number", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validate phone number format
+            if (!updatedNumber.matches("^[1-9]\\d{9}\$".toRegex())) {
+                Snackbar.make(
+                    binding.root,
+                    "Please enter a valid 10-digit phone number starting with a non-zero digit",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            viewModel.onEvent(ContactEvent.UpdateContact(contact.copy(Name = updatedName, Number = updatedNumber)))
+            dialog.dismiss()
+        }
+
+        dialogBinding.cancelbtn.setOnClickListener {
+            dialog.dismiss()
+            viewModel.onEvent(ContactEvent.HideUpdateDialog)
         }
 
         dialog.show()

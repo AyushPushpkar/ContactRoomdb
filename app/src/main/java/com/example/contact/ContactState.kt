@@ -6,4 +6,6 @@ data class ContactState(
     val number : String = "" ,
     val isAddingContact : Boolean =  false ,
     val sortType: sortType = com.example.contact.sortType.NAME ,
+    val isUpdatingContact: Boolean = false,
+    val contactToUpdate: Contact? = null
 )
