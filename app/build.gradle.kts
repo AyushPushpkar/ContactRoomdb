@@ -90,4 +90,6 @@ dependencies {
     //fancy toast
     implementation ("io.github.shashank02051997:FancyToast:2.0.2")
 
+    implementation("com.airbnb.android:lottie:6.4.0")
+
 }
