@@ -1,6 +1,7 @@
 package com.example.contact
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -141,6 +142,10 @@ class MainActivity : AppCompatActivity() {
                 Snackbar.make(binding.root, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
                     .setAnchorView(R.id.fab).show()
+            }
+            R.id.action_zego -> {
+                intent = Intent(this,LoginActivity::class.java)
+                startActivity(intent)
             }
         }
         return true

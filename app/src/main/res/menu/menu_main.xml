@@ -7,4 +7,10 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+
+    <item android:id="@+id/action_zego"
+        android:title="ZegoCloud"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_person_search_24"
+        app:showAsAction="always" />
 </menu>

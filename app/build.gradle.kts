@@ -92,4 +92,7 @@ dependencies {
 
     implementation("com.airbnb.android:lottie:6.4.0")
 
+    //zegocloud
+    implementation("com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+")
+
 }
