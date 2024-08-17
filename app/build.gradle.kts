@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 
+    alias(libs.plugins.kotlin.serialization)
+
     id("kotlin-kapt")
 }
 
@@ -94,5 +96,12 @@ dependencies {
 
     //zegocloud
     implementation("com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+")
+
+    //stream
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.stream)
+
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
 }
