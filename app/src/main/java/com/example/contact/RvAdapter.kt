@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -87,7 +88,6 @@ class RvAdapter(var context: Context, var contactList: List<Contact> ,private va
             intent.putExtra("com.android.phone.extra.IS_VIDEO_CALL", true)
             context.startActivity(intent)
         }
-
 
         // Configure Glide for instant loading
         val requestOptions = RequestOptions()

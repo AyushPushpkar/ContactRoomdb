@@ -147,6 +147,10 @@ class MainActivity : AppCompatActivity() {
                 intent = Intent(this,LoginActivity::class.java)
                 startActivity(intent)
             }
+            R.id.action_stream -> {
+                intent = Intent(this,StreamActivity::class.java)
+                startActivity(intent)
+            }
         }
         return true
     }

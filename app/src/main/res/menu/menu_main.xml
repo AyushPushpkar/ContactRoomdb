@@ -13,4 +13,10 @@
         android:orderInCategory="100"
         android:icon="@drawable/baseline_person_search_24"
         app:showAsAction="always" />
+
+    <item android:id="@+id/action_stream"
+        android:title="Stream"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_photo_camera_front_24"
+        app:showAsAction="always" />
 </menu>
